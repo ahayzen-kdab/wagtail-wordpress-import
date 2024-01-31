@@ -268,6 +268,9 @@ class WordpressImporter:
                 getattr(self.tags_cache, hook),
             )
 
+        # Run a POST import hook here
+        getattr(settings, "WORDPRESS_IMPORT_HOOK_POST", lambda _: _)(self.imported_pages)
+
     @staticmethod
     def check_stream_field_block_types(page, body):
         """Body JSON is validated to check it is using only StreamField blocks declared in the model StreamField
