@@ -301,9 +301,10 @@ class WordpressImporter:
                     item.get("wp:post_type") in page_types
                     and item.get("wp:status") in page_statuses
                 ):
-
+                    page_url = item.get("link")
                     html_analyzer.analyze(
-                        filter_linebreaks_wp(item.get("content:encoded"))
+                        filter_linebreaks_wp(item.get("content:encoded")),
+                        page_url,
                     )
 
     def connect_richtext_page_links(self, imported_pages):
