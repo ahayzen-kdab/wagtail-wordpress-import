@@ -104,7 +104,9 @@ def image_linker(html):
 
 
 def get_or_save_image(src):
-    image_file_name = get_image_file_name(src)
+    # Ensure that the filename is less than 255
+    # as the title has a max size of 255
+    image_file_name = get_image_file_name(src)[:255]
     existing_image = image_exists(image_file_name)
     if not existing_image:
         response, valid, type = fetch_url(src)
