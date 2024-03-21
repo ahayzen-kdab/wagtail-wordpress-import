@@ -181,7 +181,7 @@ def get_or_save_document(href):
     file_type = href.split(".")[-1]
     if file_type in getattr(
         settings,
-        "",
+        "WAGTAIL_WORDRESS_IMPORTER_VALID_DOCUMENT_FILE_EXTENSIONS",
         [
             "pdf",
             "ppt",
@@ -196,7 +196,7 @@ def get_or_save_document(href):
                 type
                 in getattr(
                     settings,
-                    "",
+                    "WAGTAIL_WORDRESS_IMPORTER_VALID_DOCUMENT_CONTENT_TYPES",
                     [
                         "application/pdf",
                         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
