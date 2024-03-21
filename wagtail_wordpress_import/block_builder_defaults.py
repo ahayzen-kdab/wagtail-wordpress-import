@@ -188,6 +188,18 @@ def get_or_save_document(href):
             "docx",
         ],
     ):
+        # KDAB: only try to download documents for certain domains
+        domains = getattr(
+            settings,
+            "WAGTAIL_WORDRESS_IMPORTER_VALID_DOCUMENT_DOMAINS",
+            [
+                getattr(settings, "WAGTAIL_WORDPRESS_IMPORTER_SOURCE_DOMAIN"),
+            ]
+        )
+        if not any((href.startswith(domain) for domain in domains)):
+            print(f"DOCUMENT IS AN EXTERNAL DOMAIN SKIPPING DOWNLOAD: {href}")
+            return None
+
         document_file_name = get_document_file_name(href)
         existing_document = document_exists(document_file_name)
         if not existing_document:
