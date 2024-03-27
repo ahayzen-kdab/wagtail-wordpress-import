@@ -327,7 +327,7 @@ class WordpressImporter:
             reconstructed_blocks = []
             for block in stream_data:
                 del block["id"]  # these get created on save so lose the old id
-                if block["type"] == "rich_text":
+                if block["type"] == getattr(settings, "WAGTAIL_WORDPRESS_IMPORT_PAGELINK_RICHTEXT_BLOCKTYPE", "rich_text"):
                     block["value"] = str(self.update_rich_text_page_links(block, page))
                 reconstructed_blocks.append(block)
             page.body = json.dumps(stream_data)
