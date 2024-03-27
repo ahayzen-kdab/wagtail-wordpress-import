@@ -4,7 +4,7 @@ from django.utils.html import escape
 from django.utils.text import normalize_newlines
 
 
-def filter_linebreaks_wp(pee, options=None):
+def filter_linebreaks_wp(pee, options={}):
     """
     Straight up port of http://codex.wordpress.org/Function_Reference/wpautop
     i am greatful https://gist.github.com/albertsun/1160201
@@ -109,14 +109,20 @@ def filter_linebreaks_wp(pee, options=None):
         pee,
     )
     if pee.find("<pre") != -1:
+        skip_pre_escaping = options is not None and options.get("skip_pre_escaping", False)
 
         def clean_pre(m):
+            nonlocal skip_pre_escaping
+
             if m.group(1) and m.group(2):
                 text = m.group(2)
                 text = text.replace("<br />", "")
                 text = text.replace("<p>", "\n")
                 text = text.replace("</p>", "")
-                text = m.group(1) + escape(text) + "</pre>"
+                if skip_pre_escaping:
+                    text = m.group(1) + text + "</pre>"
+                else:
+                    text = m.group(1) + escape(text) + "</pre>"
             else:
                 text = m.group(0)
                 text = text.replace("<br />", "")
