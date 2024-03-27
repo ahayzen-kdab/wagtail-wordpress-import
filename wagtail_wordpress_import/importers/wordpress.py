@@ -359,7 +359,9 @@ class WordpressImporter:
                 self.logger.page_link_errors.append((link, page))
             return self.page_model_class.objects.get(wp_link=link)
         except self.page_model_class.DoesNotExist:
-            pass
+            # If the link was http, then try https
+            if isinstance(link, str) and link.startswith("http:"):
+                return self.get_page("https:" + link[len("http:"):], page)
 
     def connect_page_categories(self, page, category_model, item):
         if "category" in item.keys():
